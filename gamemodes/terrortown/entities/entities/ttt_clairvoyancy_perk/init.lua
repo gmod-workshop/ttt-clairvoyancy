@@ -1,6 +1,6 @@
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
---resource.AddWorkshop("652046425") -- This addon
+resource.AddWorkshop("940215686") -- This addon
 local clairvoyanting = {}
 util.AddNetworkString("ttt_clairvoyant_vision")
 util.AddNetworkString("ttt_clairvoyant_vision_bought")
