@@ -13,7 +13,7 @@ After you've bought the item in the shop, an icon shows up on the left hand side
 
 Includes an individual .vmt and .vtf shop icon.
 
-##ConVars
+## ConVars
 - ttt_clairvoyant_vision (def: 1) - Should Detectives be able to buy the Clairvoyancy Perk?
 - ttt_clairvoyant_vision_duration (def: 2) - The duration for the clairvoyant vision in seconds.
 - ttt_clairvoyant_vision_camera_distance (def: 150) - The maximum allowed distance from the dead body and the camera when having a vision.
@@ -22,11 +22,11 @@ Includes an individual .vmt and .vtf shop icon.
 
 **Note: After changing these values you may have to restart your map/server. Setting 'ttt_clairvoyant_vision_chance' to 0 will disable outlining and 1 will always highlight.**
 
-##Server Infos
+## Server Infos
 Add it to your server by following this guide: http://wiki.garrysmod.com/page/Server/Workshop
 You can add "clairvoyant_perk_name" and "clairvoyant_perk_desc" to your translation file, to translate this addon.
 
-##Source
+## Source
 The whole source code can be found on [GitHub](https://github.com/DoctorJew/TTT-Clairvoyancy), feel free to contribute. The original addon was taken from [here](http://steamcommunity.com/sharedfiles/filedetails/?id=654341247) (but modified extensively!). I agree to remove this item if the Author or Valve wishes to.
 
 Thanks for reading, enjoy and have fun!
