@@ -1,9 +1,14 @@
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
+
 resource.AddWorkshop("940215686") -- This addon
-local clairvoyanting = {}
+
 util.AddNetworkString("ttt_clairvoyant_vision")
 util.AddNetworkString("ttt_clairvoyant_vision_bought")
+
+local clairvoyanting = {}
+local counter = 0
+
 include("shared.lua")
 
 --[[Perk logic]]
@@ -20,13 +25,17 @@ hook.Add("PlayerDeath", "TTTClairvoyantPerk", function(ply, infl, attacker)
 
 	for k, v in pairs(util.GetAlivePlayers()) do
 		if v:HasEquipmentItem(EQUIP_CLAIRVOYANT) and (not clairvoyanting[v:EntIndex()] or clairvoyanting[v:EntIndex()] < CurTime()) and v:GetViewEntity() == v and v:GetPos():Distance(ply.server_ragdoll:GetPos()) > 1800 then
+			counter = 0
 			table.insert(plyfilter, v)
 			clairvoyanting[v:EntIndex()] = CurTime() + visionTime + 0.3
 			pls[#pls + 1] = v
 			found = true
-		elseif clairvoyanting[v:EntIndex()] and clairvoyanting[v:EntIndex()] > CurTime() then
-			v:SetHealth(v:Health() - 5)
-			v:ChatPrint("Clairvoyancy: Your powers overwhelm your mind!")
+			counter = 1
+		elseif clairvoyanting[v:EntIndex()] and clairvoyanting[v:EntIndex()] > CurTime() and counter >= 1 then
+			counter = counter + 1
+			v:SetHealth(v:Health() - (counter * math.Rand(2, 2.5)))
+			v:SendLua("chat.AddText('Clairvoyancy: ', Color(255, 255, 255), 'Your powers overwhelm your mind!')")
+			v:SendLua("chat.PlaySound()")
 		end
 	end
 
@@ -101,6 +110,7 @@ hook.Add("PlayerDeath", "TTTClairvoyantPerk", function(ply, infl, attacker)
 					net.WriteVector(rag:GetPos())
 					net.WriteUInt(rag:EntIndex(), 16)
 					net.Send(plyfilter)
+					counter = 0
 				end
 			end)
 		end)
