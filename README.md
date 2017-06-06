@@ -27,6 +27,6 @@ Add it to your server by following this guide: http://wiki.garrysmod.com/page/Se
 You can add "clairvoyant_perk_name" and "clairvoyant_perk_desc" to your translation file, to translate this addon.
 
 ##Source
-The whole source code can be found on [https://github.com/DoctorJew/TTT-Clairvoyancy](GitHub), feel free to contribute. The original addon was taken from [url=http://steamcommunity.com/sharedfiles/filedetails/?id=654341247](here) (but modified extensively!). I agree to remove this item if the Author or Valve wishes to.
+The whole source code can be found on [GitHub](https://github.com/DoctorJew/TTT-Clairvoyancy), feel free to contribute. The original addon was taken from [here](http://steamcommunity.com/sharedfiles/filedetails/?id=654341247) (but modified extensively!). I agree to remove this item if the Author or Valve wishes to.
 
 Thanks for reading, enjoy and have fun!
