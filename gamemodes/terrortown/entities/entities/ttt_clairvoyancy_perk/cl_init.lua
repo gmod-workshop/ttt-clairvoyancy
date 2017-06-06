@@ -80,7 +80,7 @@ local function endClairvoyant(send, ent)
 		halo.Add(body, Color(0, 255, 0), 0, 0, 2, true, true)
 		if timer.Exists("RagdollHalo") then return end
 
-		timer.Create("RagdollHalo", 10, 1, function()
+		timer.Create("RagdollHalo", GetConVar("ttt_clairvoyant_chance_duration"):GetFloat(), 1, function()
 			hook.Remove("PreDrawHalos", "TTT_Clairvoyant_PreDrawHalos")
 			chat.AddText("Clairvoyancy: ", Color(255, 255, 255), "Your memory of the body fades. . .")
 			chat.PlaySound()
