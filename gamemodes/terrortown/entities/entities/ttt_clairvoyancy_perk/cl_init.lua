@@ -1,6 +1,6 @@
 include("shared.lua")
 LANG.AddToLanguage("english", "clairvoyant_perk_name", "Clairvoyancy")
-LANG.AddToLanguage("english", "clairvoyant_perk_desc", "When somebody dies,\nyou will see their body,\nfor a brief moment.")
+LANG.AddToLanguage("english", "clairvoyant_perk_desc", "When somebody dies, you will see their body for a brief moment.")
 -- feel for to use this function for your own perk, but please credit me
 -- your perk needs a "hud = true" in the table, to work properly
 local defaultY = ScrH() / 2 + 20
@@ -43,6 +43,9 @@ end)
 
 --[[Perk logic]]
 --
+local body = {}
+local num = 1
+
 local function endClairvoyant(send, ent)
 	hook.Remove("CalcView", "TTT_Clairvoyant_CalcView")
 	hook.Remove("RenderScreenspaceEffects", "TTT_Clairvoyant_RenderScreenspaceEffects")
@@ -69,22 +72,24 @@ local function endClairvoyant(send, ent)
 	end)
 
 	local rag = Entity(ent) or nil
-	if !IsValid(rag) then return end
+	if not IsValid(rag) then return end
+
 	if math.random() > GetConVar("ttt_clairvoyant_vision_chance"):GetFloat() then return end
+
 	chat.AddText("Clairvoyancy: ", Color(255, 255, 255), "You remembered the location of the body!")
 	chat.PlaySound()
 
-	hook.Add("PreDrawHalos", "TTT_Clairvoyant_PreDrawHalos", function()
-		local body = {}
-		table.insert(body, rag)
-		halo.Add(body, Color(0, 255, 0), 0, 0, 2, true, true)
-		if timer.Exists("RagdollHalo") then return end
+	table.insert(body, num, rag)
+	num = num + 1
 
-		timer.Create("RagdollHalo", GetConVar("ttt_clairvoyant_chance_duration"):GetFloat(), 1, function()
-			hook.Remove("PreDrawHalos", "TTT_Clairvoyant_PreDrawHalos")
-			chat.AddText("Clairvoyancy: ", Color(255, 255, 255), "Your memory of the body fades. . .")
-			chat.PlaySound()
-		end)
+	if timer.Exists("RagdollHalo" .. ent) then return end
+
+	timer.Create("RagdollHalo" .. ent, GetConVar("ttt_clairvoyant_chance_duration"):GetFloat(), 1, function()
+		table.RemoveByValue(body, rag)
+		num = num - 1
+
+		chat.AddText("Clairvoyancy: ", Color(255, 255, 255), "Your memory of the body fades. . .")
+		chat.PlaySound()
 	end)
 end
 
@@ -94,7 +99,6 @@ local function startClairvoyant(rag, duration, tpos)
 	LocalPlayer():EmitSound("ambient/machines/thumper_hit.wav", 500, 120)
 	rag:EmitSound("ambient/machines/thumper_hit.wav", 500, 120)
 	local sharp = -5
-	local dur = duration - CurTime()
 	hook.Add("HUDPaint", "TTT_Clairvoyant_HUDPaint", function() return true end)
 
 	hook.Add("RenderScreenspaceEffects", "TTT_Clairvoyant_RenderScreenspaceEffects", function()
@@ -120,7 +124,7 @@ local function startClairvoyant(rag, duration, tpos)
 	local ar = Angle(0, 0, math.random(-15, 15))
 
 	hook.Add("CalcView", "TTT_Clairvoyant_CalcView", function(ply, origin, angles, fov)
-		if (!IsValid(rag) or !LocalPlayer():IsTerror() or LocalPlayer():KeyDown(IN_BACK)) then
+		if not (IsValid(rag) and LocalPlayer():IsTerror()) or LocalPlayer():KeyDown(IN_BACK) then
 			endClairvoyant(true, rag:EntIndex())
 
 			return
@@ -163,6 +167,25 @@ local function startClairvoyant(rag, duration, tpos)
 		return view
 	end)
 end
+
+hook.Add("PreDrawHalos", "TTT_Clairvoyant_PreDrawHalos", function()
+	if num == 0 then return end
+
+	if GetRoundState() ~= ROUND_ACTIVE then
+		for k, v in pairs(body) do
+			if timer.Exists("RagdollHalo" .. v:EntIndex()) then
+				timer.Adjust("RagdollHalo" .. v:EntIndex(), 0.01, 1, function()
+					table.RemoveByValue(body, v)
+					num = num - 1
+				end)
+			end
+		end
+
+		return
+	end
+
+	halo.Add(body, Color(0, 255, 0), 0, 0, 2, true, true)
+end)
 
 local lastcla = nil
 
@@ -209,7 +232,7 @@ net.Receive("ttt_clairvoyant_vision", function()
 			end
 		end
 
-		if !IsValid(rag) then
+		if not IsValid(rag) then
 			endClairvoyant(true)
 
 			return
@@ -245,7 +268,7 @@ end)
 
 net.Receive("ttt_clairvoyant_vision_bought", function()
 	local bought = net.ReadBool()
-	if !bought then return end
+	if not bought then return end
 	chat.AddText("Clairvoyancy: ", Color(255, 255, 255), "Your mind awakens to the voices of the dead. . .")
 	chat.PlaySound()
 end)

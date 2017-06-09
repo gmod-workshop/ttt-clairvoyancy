@@ -5,7 +5,8 @@ CreateConVar("ttt_clairvoyant_vision_camera_distance", 150, {FCVAR_NOTIFY, FCVAR
 CreateConVar("ttt_clairvoyant_vision", 1, {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Should Detectives be able to buy the Clairvoyant Perk?")
 CreateConVar("ttt_clairvoyant_vision_chance", 0.5, {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Chance that the Detective will see an outline of the body (0.0 - 1.0).")
 CreateConVar("ttt_clairvoyant_chance_duration", 20, {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Time a highlighted body will be visible.")
-EQUIP_CLAIRVOYANT = (GenerateNewEquipmentID and GenerateNewEquipmentID()) or 98
+
+EQUIP_CLAIRVOYANT = (GenerateNewEquipmentID and GenerateNewEquipmentID()) or 2048
 
 local perk = {
 	id = EQUIP_CLAIRVOYANT,
