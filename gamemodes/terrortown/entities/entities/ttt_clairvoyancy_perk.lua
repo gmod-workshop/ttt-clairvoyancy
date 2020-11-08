@@ -1,5 +1,7 @@
 if TTT2 then return end
 
+AddCSLuaFile()
+
 -- author "Doctor Jew"
 -- contact "http://steamcommunity.com/DoctorJew"
 CreateConVar("ttt_clairvoyant_duration", 3, {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "The duration for the Clairvoyant vision in seconds.")
